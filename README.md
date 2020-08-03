@@ -1,10 +1,14 @@
-# Pcre2
+# PCRE2
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pcre2`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This library provides an interface for the PCRE2 library, which supports more advanced regular expression functionality than the built-in Ruby `Regexp`.
 
 ## Installation
+
+Install the PCRE2 library:
+
+```bash
+brew install pcre2
+```
 
 Add this line to your application's Gemfile:
 
