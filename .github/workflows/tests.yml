@@ -1,0 +1,21 @@
+# Setup Ruby, install gems, cache gems, and run test suite
+# - https://github.com/ruby/setup-ruby
+
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ '2.5', '2.6' ]
+    name: Ruby ${{ matrix.ruby }} tests
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+        ruby-version: ${{ matrix.ruby }}
+    - run: bundle install
+    - run: bundle exec rake -t
