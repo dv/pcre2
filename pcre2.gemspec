@@ -2,7 +2,7 @@ require_relative 'lib/pcre2/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "pcre2"
-  spec.version       = Pcre2::VERSION
+  spec.version       = PCRE2::VERSION
   spec.authors       = ["David Verhasselt"]
   spec.email         = ["david@crowdway.com"]
 
