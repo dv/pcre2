@@ -4,6 +4,10 @@ RSpec.describe PCRE2 do
   end
 
   it "does something useful" do
-    expect(false).to eq(true)
+    regexp = PCRE2::Regexp.new("hello")
+
+    matchdata = regexp.match("this is a hello world!")
+
+    expect(matchdata.offset(0)).to eq([10, 15])
   end
 end
