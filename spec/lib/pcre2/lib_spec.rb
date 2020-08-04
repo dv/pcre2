@@ -15,4 +15,13 @@ RSpec.describe PCRE2::Lib do
       expect(result).to eq("no match")
     end
   end
+
+  describe ".match" do
+    it "returns 0 when no matches" do
+      pattern_ptr = PCRE2::Lib.compile_pattern("hello")
+      result_count, match_data_ptr = PCRE2::Lib.match(pattern_ptr, "goodbye")
+
+      expect(result_count).to eq(0)
+    end
+  end
 end

@@ -26,7 +26,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+regexp = PCRE2::Regexp.new("hello")
+subject = "well hello there!"
+match_data = regexp.match(subject)
+
+match_data.offset(0) # [5, 9] - start and end of the match
+```
+
+## Resources
+
+- [PCRE2 Library](https://www.pcre.org/current/doc/html/)
+- [PCRE2 demo](https://www.pcre.org/current/doc/html/pcre2demo.html)
 
 ## Development
 
@@ -37,7 +48,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/pcre2.
-
 
 ## License
 
