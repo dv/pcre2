@@ -34,6 +34,14 @@ match_data = regexp.match(subject)
 match_data.offset(0) # [5, 10] - start and end of the match
 ```
 
+## Benchmark
+
+You can run the benchmark that compares `PCRE2::Regexp` with Ruby's built-in `Regexp` as follows:
+
+```bash
+bundle exec rake benchmark
+```
+
 ## Resources
 
 - [PCRE2 Library](https://www.pcre.org/current/doc/html/)
