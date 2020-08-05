@@ -1,9 +1,9 @@
 class PCRE2::Regexp
   attr :source
 
-  def initialize(pattern)
+  def initialize(pattern, *options)
     @source = pattern
-    @pattern_ptr = PCRE2::Lib.compile_pattern(pattern)
+    @pattern_ptr = PCRE2::Lib.compile_pattern(pattern, options)
   end
 
   def match(str, pos = nil)

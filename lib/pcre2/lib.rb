@@ -52,12 +52,13 @@ module PCRE2::Lib
   end
 
   # Some utility functions to help make the above more palatable
-  def self.compile_pattern(pattern)
+  def self.compile_pattern(pattern, options = [])
     pattern_string_ptr = FFI::MemoryPointer.from_string(pattern)
     error_code_ptr     = FFI::MemoryPointer.new(:int, 1)
     error_offset_ptr   = FFI::MemoryPointer.new(PCRE2_SIZE, 1)
+    options            = options.flatten.inject(0) { |memo, option| memo | option }
 
-    pattern_ptr = PCRE2::Lib.pcre2_compile_8(pattern_string_ptr, pattern.size, 0, error_code_ptr, error_offset_ptr, nil)
+    pattern_ptr = PCRE2::Lib.pcre2_compile_8(pattern_string_ptr, pattern.size, options, error_code_ptr, error_offset_ptr, nil)
 
     if pattern_ptr.null?
       error_code = error_code_ptr.read_int

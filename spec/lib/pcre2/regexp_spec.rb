@@ -49,4 +49,27 @@ RSpec.describe PCRE2::Regexp do
       expect(result.offset(0)).to eq([11, 16])
     end
   end
+
+  context "with options" do
+    it "matches case insensitive" do
+      re = PCRE2::Regexp.new("HELLO")
+      expect(re.match("hello!")).to be_nil
+
+      re = PCRE2::Regexp.new("HELLO", PCRE2::PCRE2_CASELESS)
+      expect(re.match("hello!")).not_to be_nil
+    end
+
+    it "allows duplicate named subpatterns" do\
+      pattern = "(?<a>.)(?<a>)"
+
+      expect { PCRE2::Regexp.new(pattern) }.to raise_error(/two named subpatterns have the same name/)
+      expect { PCRE2::Regexp.new(pattern, PCRE2::PCRE2_DUPNAMES) }.not_to raise_error
+    end
+
+    it "accepts multiple options" do
+      re = PCRE2::Regexp.new("HELLO|(?<a>world)(?<a>country)", PCRE2::PCRE2_DUPNAMES, PCRE2::PCRE2_CASELESS)
+
+      expect(re.match("hello!")).not_to be_nil
+    end
+  end
 end
