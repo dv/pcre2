@@ -31,7 +31,7 @@ regexp = PCRE2::Regexp.new("hello")
 subject = "well hello there!"
 match_data = regexp.match(subject)
 
-match_data.offset(0) # [5, 9] - start and end of the match
+match_data.offset(0) # [5, 10] - start and end of the match
 ```
 
 ## Resources

@@ -18,7 +18,18 @@ RSpec.describe PCRE2::Regexp do
 
       result = regexp.match(subject)
 
-      expect(result.offset(0)).to eq([5, 9])
+      expect(result.offset(0)).to eq([5, 10])
+    end
+
+    it "matches very long patterns" do
+      part = "aa"
+      pattern = part * 100
+      subject = part * 99
+
+      regexp = PCRE2::Regexp.new(pattern)
+
+      expect(regexp.match(subject)).to be_nil
+      expect(regexp.match(subject + part)).not_to be_nil
     end
 
     it "returns nil when no match" do
@@ -35,7 +46,7 @@ RSpec.describe PCRE2::Regexp do
 
       result = regexp.match(subject, 11)
 
-      expect(result.offset(0)).to eq([11, 15])
+      expect(result.offset(0)).to eq([11, 16])
     end
   end
 end

@@ -57,8 +57,8 @@ module PCRE2::Lib
     error_code_ptr = FFI::MemoryPointer.new(:int8, 1)
     error_offset_ptr = FFI::MemoryPointer.new(:size_t, 1)
 
-    pattern_ptr = PCRE2::Lib.pcre2_compile_8(pattern_string_ptr, 4, 0, error_code_ptr, error_offset_ptr, nil)
 
+    pattern_ptr = PCRE2::Lib.pcre2_compile_8(pattern_string_ptr, pattern.size, 0, error_code_ptr, error_offset_ptr, nil)
 
     if pattern_ptr.null?
       error_code = error_code_ptr.get_int8(0)
