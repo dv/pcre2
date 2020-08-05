@@ -50,6 +50,32 @@ RSpec.describe PCRE2::Regexp do
     end
   end
 
+  context "with named captures" do
+    describe "#named_captures" do
+      it "returns a list of named subpatterns and positions" do
+        pattern = '(?<a>\w+)(?<b>\W+)(?<c>\w+)(?<c>aaa)'
+        re = PCRE2::Regexp.new(pattern, PCRE2::PCRE2_DUPNAMES)
+
+        expect(re.named_captures).to eq(
+          {
+            "a" => [1],
+            "b" => [2],
+            "c" => [3, 4]
+          }
+        )
+      end
+    end
+
+    describe "#names" do
+      it "returns names of the named captures" do
+        pattern = '(?<a>\w+)(?<b>\W+)(?<c>\w+)'
+        re = PCRE2::Regexp.new(pattern)
+
+        expect(re.names).to eq(["a", "b", "c"])
+      end
+    end
+  end
+
   context "with options" do
     it "matches case insensitive" do
       re = PCRE2::Regexp.new("HELLO")

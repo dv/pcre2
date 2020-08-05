@@ -1,5 +1,5 @@
 class PCRE2::Regexp
-  attr :source
+  attr :source, :pattern_ptr
 
   def initialize(pattern, *options)
     @source = pattern
@@ -12,7 +12,17 @@ class PCRE2::Regexp
     if result_count == 0
       nil
     else
-      PCRE2::MatchData.from_match_data_pointer(match_data_ptr, result_count)
+      pairs = PCRE2::Lib.get_ovector_pairs(match_data_ptr, result_count)
+
+      PCRE2::MatchData.new(self, str, pairs)
     end
+  end
+
+  def named_captures
+    @named_captures ||= PCRE2::Lib.named_captures(pattern_ptr)
+  end
+
+  def names
+    named_captures.keys
   end
 end

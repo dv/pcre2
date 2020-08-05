@@ -23,6 +23,9 @@ module PCRE2::Lib
   attach_function :pcre2_compile_8, [ :PCRE2_SPTR, :PCRE2_SIZE, :uint32_t, :pointer, :pointer, :pointer ], :pointer
   attach_function :pcre2_code_free_8, [ :pointer ], :void
 
+  # int pcre2_pattern_info(const pcre2_code *code, uint32_t what, void *where);
+  attach_function :pcre2_pattern_info_8, [ :pointer, :uint32_t, :pointer ], :int
+
   # pcre2_match_data *pcre2_match_data_create_from_pattern( const pcre2_code *code, pcre2_general_context *gcontext);
   attach_function :pcre2_match_data_create_from_pattern_8, [ :pointer, :pointer ], :pointer
   attach_function :pcre2_match_data_free_8, [ :pointer ], :void
@@ -122,5 +125,40 @@ module PCRE2::Lib
         ovector_ptr.get(:size_t, (i*2+1) * type_size)
       ]
     end
+  end
+
+  def self.named_captures(pattern_ptr)
+    named_captures_count = FFI::MemoryPointer.new(:uint32_t, 1)
+    name_entry_size      = FFI::MemoryPointer.new(:uint32_t, 1)
+    name_table_ptr       = FFI::MemoryPointer.new(:pointer, 1)
+
+    if PCRE2::Lib.pcre2_pattern_info_8(pattern_ptr, PCRE2::PCRE2_INFO_NAMECOUNT, named_captures_count) != 0
+      raise "Something went wrong"
+    end
+
+    if PCRE2::Lib.pcre2_pattern_info_8(pattern_ptr, PCRE2::PCRE2_INFO_NAMEENTRYSIZE, name_entry_size) != 0
+      raise "Something went wrong"
+    end
+
+    if PCRE2::Lib.pcre2_pattern_info_8(pattern_ptr, PCRE2::PCRE2_INFO_NAMETABLE, name_table_ptr) != 0
+      raise "Something went wrong"
+    end
+
+    named_captures_count = named_captures_count.read_uint32
+    name_entry_size      = name_entry_size.read_uint32
+    name_table_ptr       = name_table_ptr.read_pointer
+
+    names_and_positions =
+      named_captures_count.times.map do |i|
+        ovector_position = (name_table_ptr.get_int8(0) << 8) + name_table_ptr.get_int8(1)
+        match_name = (name_table_ptr+2).read_string_to_null
+
+        name_table_ptr += name_entry_size
+
+        [match_name, ovector_position]
+      end
+
+    # Convert an array of [name, position] into a Hash of name => [position], with possible duplicate names
+    names_and_positions.each_with_object(Hash.new {[]} ) { |(name, position), hash| hash[name] <<= position }
   end
 end

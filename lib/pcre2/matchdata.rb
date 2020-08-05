@@ -1,13 +1,20 @@
 class PCRE2::MatchData
-  attr_accessor :pairs
+  attr :regexp, :pairs, :string
 
-  def self.from_match_data_pointer(match_data_ptr, result_count = nil)
-    match_pair, *capture_pairs = PCRE2::Lib.get_ovector_pairs(match_data_ptr, result_count)
+  def initialize(regexp, string, pairs)
+    @regexp = regexp
+    @string = string
+    @pairs = pairs
+  end
 
-    md = PCRE2::MatchData.new
-    md.pairs = [match_pair] + capture_pairs
+  def [](key)
+    if !key.is_a?(Numeric)
+      key = regexp.named_captures[key.to_s].first
+    end
 
-    md
+    if pair = pairs[key]
+      string_from_pair(*pair)
+    end
   end
 
   def offset(n)
@@ -16,5 +23,19 @@ class PCRE2::MatchData
 
   def capture_pairs
     pairs[1..-1]
+  end
+
+  def to_a
+    pairs.map { |pair| string_from_pair(*pair) }
+  end
+
+  def captures
+    to_a[1..-1]
+  end
+
+  private
+
+  def string_from_pair(start, ending)
+    string.slice(start, ending-start)
   end
 end
