@@ -24,4 +24,10 @@ RSpec.describe PCRE2::Lib do
       expect(result_count).to eq(0)
     end
   end
+
+  describe ".compile_pattern" do
+    it "raises an error if something went wrong" do
+      expect { PCRE2::Lib.compile_pattern("(?a") }.to raise_error(PCRE2::Error)
+    end
+  end
 end
