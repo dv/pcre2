@@ -43,12 +43,12 @@ module PCRE2::Lib
 
     case result
     when PCRE2::PCRE2_ERROR_BADDATA
-      raise PCRE2::Error, "Error number #{error_code} unknown"
+      "Error number #{error_code} unknown"
     when PCRE2::PCRE2_ERROR_NOMEMORY
       raise PCRE2::Error, "Buffer of #{buffer.size} is not large enough to contain message"
+    else
+      buffer.read_string
     end
-
-    buffer.read_string
   end
 
   # Some utility functions to help make the above more palatable
