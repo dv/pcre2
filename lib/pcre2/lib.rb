@@ -162,7 +162,7 @@ module PCRE2::Lib
         [match_name, ovector_position]
       end
 
-    # Convert an array of [name, position] into a Hash of name => [position], with possible duplicate names
+    # Convert an array of [name, position] into a Hash of name => [position (, position, ...)], with possible duplicate names
     names_and_positions.each_with_object(Hash.new {[]} ) { |(name, position), hash| hash[name] <<= position }
   end
 end
