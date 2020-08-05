@@ -7,8 +7,8 @@ RSpec.describe PCRE2::Lib do
     end
 
     it "accepts a MemoryPointer" do
-      error_code = FFI::MemoryPointer.new(:int8, 1)
-      error_code.write_int8(PCRE2::PCRE2_ERROR_NOMATCH)
+      error_code = FFI::MemoryPointer.new(:int, 1)
+      error_code.write_int(PCRE2::PCRE2_ERROR_NOMATCH)
 
       result = PCRE2::Lib.get_error_message(error_code)
 
@@ -26,8 +26,15 @@ RSpec.describe PCRE2::Lib do
   end
 
   describe ".compile_pattern" do
-    it "raises an error if something went wrong" do
-      expect { PCRE2::Lib.compile_pattern("(?a") }.to raise_error(PCRE2::Error)
+    errors = {
+      '(?<>.' => /Error 162: subpattern name expected/,
+      '(.*'   => /Error 114: missing closing parenthesis/,
+    }
+
+    errors.each do |pattern, error|
+      it "raises the correct error for '#{pattern}'" do
+        expect { PCRE2::Lib.compile_pattern(pattern) }.to raise_error(PCRE2::Error, error)
+      end
     end
   end
 end

@@ -35,7 +35,7 @@ module PCRE2::Lib
 
   def self.get_error_message(error_code)
     if error_code.kind_of?(FFI::MemoryPointer)
-      error_code = error_code.get_int8(0)
+      error_code = error_code.read_int
     end
 
     buffer = FFI::MemoryPointer.new(PCRE2_UCHAR, 120)
@@ -54,15 +54,14 @@ module PCRE2::Lib
   # Some utility functions to help make the above more palatable
   def self.compile_pattern(pattern)
     pattern_string_ptr = FFI::MemoryPointer.from_string(pattern)
-    error_code_ptr = FFI::MemoryPointer.new(:int8, 1)
-    error_offset_ptr = FFI::MemoryPointer.new(:size_t, 1)
-
+    error_code_ptr     = FFI::MemoryPointer.new(:int, 1)
+    error_offset_ptr   = FFI::MemoryPointer.new(PCRE2_SIZE, 1)
 
     pattern_ptr = PCRE2::Lib.pcre2_compile_8(pattern_string_ptr, pattern.size, 0, error_code_ptr, error_offset_ptr, nil)
 
     if pattern_ptr.null?
-      error_code = error_code_ptr.get_int8(0)
-      error_offset = error_offset_ptr.get_int8(0)
+      error_code = error_code_ptr.read_int
+      error_offset = error_offset_ptr.read(PCRE2_SIZE)
 
       raise PCRE2::Error.from_error_code(error_code, "while compiling pattern #{pattern} @ #{error_offset}")
     end
