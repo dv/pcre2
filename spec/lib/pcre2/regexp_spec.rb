@@ -98,4 +98,10 @@ RSpec.describe PCRE2::Regexp do
       expect(re.match("hello!")).not_to be_nil
     end
   end
+
+  describe "#jit!" do
+    it "compiles successfully" do
+      expect(PCRE2::Regexp.new("hello").jit!).to be_truthy
+    end
+  end
 end

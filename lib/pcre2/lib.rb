@@ -36,6 +36,10 @@ module PCRE2::Lib
   attach_function :pcre2_get_ovector_count_8, [ :pointer ], :uint32_t
   attach_function :pcre2_get_ovector_pointer_8, [ :pointer ], :pointer
 
+  # int pcre2_jit_compile(pcre2_code *code, uint32_t options)
+  attach_function :pcre2_jit_compile_8, [ :pointer, :uint32_t ], :int
+
+
   def self.get_error_message(error_code)
     if error_code.kind_of?(FFI::MemoryPointer)
       error_code = error_code.read_int

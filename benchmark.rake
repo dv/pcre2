@@ -14,14 +14,24 @@ task :benchmark do
 
     GC.disable
     Benchmark.bmbm do |benchmark|
+      ruby_re = Regexp.new(pattern)
+      pcre2_re = PCRE2::Regexp.new(pattern)
+      pcre2_re_jit = PCRE2::Regexp.new(pattern).tap(&:jit!)
+
       benchmark.report("Ruby Regexp") do
-        re = Regexp.new(pattern)
-        100000.times { task.call(re) }
+        100000.times { task.call(ruby_re) }
       end
 
+      GC.start
+
       benchmark.report("PCRE2 Regexp") do
-        re = PCRE2::Regexp.new(pattern)
-        100000.times { task.call(re) }
+        100000.times { task.call(pcre2_re) }
+      end
+
+      GC.start
+
+      benchmark.report("PCRE2 Regexp - JIT enhanced") do
+        100000.times { task.call(pcre2_re_jit) }
       end
     end
     GC.enable
