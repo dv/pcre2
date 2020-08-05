@@ -1,6 +1,6 @@
 # PCRE2
 
-This library provides an interface for the PCRE2 library, which supports more advanced regular expression functionality than the built-in Ruby `Regexp`.
+This library provides a Ruby interface for the PCRE2 library, which supports more advanced regular expression functionality than the built-in Ruby `Regexp`.
 
 ## Installation
 
@@ -26,12 +26,17 @@ Or install it yourself as:
 
 ## Usage
 
+`PCRE2::Regexp` aims to act as much like Ruby's `Regexp` as possible. It has implemented a subset of the `Regexp` and `MatchData` APIs so it can be used as a drop-in replacement.
+
 ```ruby
 regexp = PCRE2::Regexp.new("hello")
 subject = "well hello there!"
-match_data = regexp.match(subject)
+matchdata = regexp.match(subject)
 
-match_data.offset(0) # [5, 10] - start and end of the match
+matchdata.offset(0) # [5, 10] - start and end of the match
+matchdata[0] # => "hello"
+
+matchdata = regexp.match(subject, 11) # find next match
 ```
 
 ## Benchmark
@@ -55,7 +60,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/pcre2.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dv/pcre2.
 
 ## License
 
