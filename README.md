@@ -2,6 +2,17 @@
 
 This library provides a Ruby interface for the PCRE2 library, which supports more advanced regular expression functionality than the built-in Ruby `Regexp`.
 
+## Why?
+
+Ruby's `Regexp` is actually quite fast! For simple Regexps without backtracking (for instance regexp without matches like `.*`), you should probably keep using the Ruby `Regexp`. No extra dependencies and it'll be faster than using an external library, including PCRE2.
+
+The main reason I built this was so I could use the [backtracking control verbs](https://www.rexegg.com/backtracking-control-verbs.html#mainverbs) such as `(*SKIP)(*FAIL)` that are not supported by Ruby's `Regexp`. Using these, and other features, `PCRE2` supports some pretty wild and advanced regular expressions which you cannot do with Ruby's `Regexp`.
+
+`PCRE2` also supports JIT (just-in-time) compilation of the regular expression. From [the manual](https://www.pcre.org/current/doc/html/pcre2jit.html):
+> Just-in-time compiling is a heavyweight optimization that can greatly speed up pattern matching. However, it comes at the cost of extra processing before the match is performed, so it is of most benefit when the same pattern is going to be matched many times. This does not necessarily mean many calls of a matching function; if the pattern is not anchored, matching attempts may take place many times at various positions in the subject, even for a single call. Therefore, if the subject string is very long, it may still pay to use JIT even for one-off matches.
+
+You can enable JIT by calling `regexp.jit!` on the `PCRE2::Regexp` object. Using JIT the `PCRE2` matching can be more than 2X faster than Ruby's built-in.
+
 ## Installation
 
 Install the PCRE2 library:
