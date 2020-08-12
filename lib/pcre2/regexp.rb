@@ -2,6 +2,8 @@ module PCRE2
   class Regexp
     attr :source, :pattern_ptr
 
+    include StringUtils
+
     def initialize(pattern, *options)
       @source = pattern
       @pattern_ptr = Lib.compile_pattern(pattern, options)

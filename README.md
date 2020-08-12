@@ -50,6 +50,15 @@ matchdata[0] # => "hello"
 matchdata = regexp.match(subject, 11) # find next match
 ```
 
+Also some of the utility methods on `String` are reimplemented on `PCRE2::Regexp`:
+
+```ruby
+regexp = PCRE2::Regexp.new('\d+')
+subject = "and a 1 and a 2 and a 345"
+
+regexp.scan(subject) # => ["1", "2", "345"]
+```
+
 ## Benchmark
 
 You can run the benchmark that compares `PCRE2::Regexp` with Ruby's built-in `Regexp` as follows:
