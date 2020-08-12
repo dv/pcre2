@@ -26,7 +26,7 @@ class PCRE2::MatchData
   end
 
   def to_a
-    pairs.map { |pair| string_from_pair(*pair) }
+    @to_a ||= pairs.map { |pair| string_from_pair(*pair) }
   end
 
   def captures
