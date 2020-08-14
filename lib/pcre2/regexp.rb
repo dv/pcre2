@@ -28,6 +28,23 @@ module PCRE2
       end
     end
 
+    def matches(str, pos = nil, &block)
+      return enum_for(:matches, str, pos).to_a if !block_given?
+
+      pos ||= 0
+      while pos < str.length
+        matchdata = self.match(str, pos)
+
+        if matchdata
+          yield matchdata
+
+          pos = matchdata.offset(0)[1]
+        else
+          return
+        end
+      end
+    end
+
     def named_captures
       @named_captures ||= Lib.named_captures(pattern_ptr)
     end

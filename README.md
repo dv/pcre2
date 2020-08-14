@@ -59,6 +59,17 @@ subject = "and a 1 and a 2 and a 345"
 regexp.scan(subject) # => ["1", "2", "345"]
 ```
 
+There is one new method not available on `Regexp`: `PCRE2::Regexp#matches` which will loop over all matches of the string, and yield the corresponding `Matchdata`:
+
+```ruby
+string = "well hello hello hello there!"
+re = PCRE2::Regexp.new("hello")
+
+re.matches(string) do |matchdata|
+  puts "Matchdata found between #{matchdata.offsets(0)[0]} and #{matchdata.offsets(0)[1]}"
+end
+```
+
 ## Benchmark
 
 You can run the benchmark that compares `PCRE2::Regexp` with Ruby's built-in `Regexp` as follows:

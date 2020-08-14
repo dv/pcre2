@@ -50,6 +50,20 @@ RSpec.describe PCRE2::Regexp do
     end
   end
 
+  describe "#matches" do
+    let(:string) { "well hello hello hello there!"}
+    let(:regexp) { PCRE2::Regexp.new("hello") }
+
+    it "yields all matchdatas" do
+      matchdatas = regexp.matches(string).to_a
+
+      expect(matchdatas.length).to eq(3)
+      expect(matchdatas[0].offset(0)).to eq([5, 10])
+      expect(matchdatas[1].offset(0)).to eq([11, 16])
+      expect(matchdatas[2].offset(0)).to eq([17, 22])
+    end
+  end
+
   context "with named captures" do
     describe "#named_captures" do
       it "returns a list of named subpatterns and positions" do
