@@ -34,7 +34,7 @@ class PCRE2::MatchData
   end
 
   def pre_match
-    string[0 .. beginning_of_match - 1]
+    string[0 ... beginning_of_match]
   end
 
   def post_match
