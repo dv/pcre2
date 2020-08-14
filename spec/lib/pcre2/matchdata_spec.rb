@@ -32,4 +32,11 @@ RSpec.describe PCRE2::MatchData do
       expect(matchdata.to_a).to eq(["hello world", "hello", "world"])
     end
   end
+
+  describe "#pre_match and #post_match" do
+    it "returns the correct results" do
+      expect(matchdata.pre_match).to eq("one two three ")
+      expect(matchdata.post_match).to eq(" today!")
+    end
+  end
 end
