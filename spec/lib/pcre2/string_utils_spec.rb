@@ -28,4 +28,24 @@ RSpec.describe PCRE2::StringUtils do
       expect(result).to eq([["and a", "1"], ["and a", "2"], ["and a", "345"]])
     end
   end
+
+  describe "#split" do
+    it "splits where the regexp matches" do
+      subject = "and a 1 and a 2 and a 345"
+      regexp = PCRE2::Regexp.new('\d+')
+
+      result = regexp.split(subject)
+
+      expect(result).to eq(["and a ", " and a ", " and a "])
+    end
+
+    it "returns captures in the result too" do
+      subject = "and a 1 and a 12 and a 345"
+      regexp = PCRE2::Regexp.new('\d(\d*)')
+
+      result = regexp.split(subject)
+
+      ["and a ", "", " and a ", "2", " and a ", "45"]
+    end
+  end
 end

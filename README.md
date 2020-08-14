@@ -56,7 +56,8 @@ Also some of the utility methods on `String` are reimplemented on `PCRE2::Regexp
 regexp = PCRE2::Regexp.new('\d+')
 subject = "and a 1 and a 2 and a 345"
 
-regexp.scan(subject) # => ["1", "2", "345"]
+regexp.scan(subject)  # => ["1", "2", "345"]
+regexp.split(subject) # => ["and a ", " and a ", " and a "]
 ```
 
 There is one new method not available on `Regexp`: `PCRE2::Regexp#matches` which will loop over all matches of the string, and yield the corresponding `Matchdata`:
