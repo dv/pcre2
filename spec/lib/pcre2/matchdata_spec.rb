@@ -39,4 +39,13 @@ RSpec.describe PCRE2::MatchData do
       expect(matchdata.post_match).to eq(" today!")
     end
   end
+
+  describe "#length" do
+    it "returns 0 for a zero-length match" do
+      re = PCRE2::Regexp.new("")
+      matchdata = re.match("string")
+
+      expect(matchdata.length).to eq(0)
+    end
+  end
 end

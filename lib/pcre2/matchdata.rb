@@ -33,23 +33,27 @@ class PCRE2::MatchData
     to_a[1..-1]
   end
 
+  def length
+    start_of_match - end_of_match
+  end
+
   def pre_match
-    string[0 ... beginning_of_match]
+    string[0 ... start_of_match]
   end
 
   def post_match
-    string[ending_of_match .. -1]
+    string[end_of_match .. -1]
   end
 
-  private
-
-  def beginning_of_match
+  def start_of_match
     offset(0)[0]
   end
 
-  def ending_of_match
+  def end_of_match
     offset(0)[1]
   end
+
+  private
 
   def string_from_pair(start, ending)
     string.slice(start, ending-start)
