@@ -8,6 +8,18 @@ RSpec.describe PCRE2::Regexp do
         PCRE2::Regexp.new(pattern)
       end.to raise_error(/unmatched parenthesis/)
     end
+
+    it "accepts a ::Regexp" do
+      re = PCRE2::Regexp.new(/a/)
+
+      expect(re.source).to eq("a")
+    end
+
+    it "accepts another PCRE2::Regexp" do
+      re = PCRE2::Regexp.new(PCRE2::Regexp.new("a"))
+
+      expect(re.source).to eq("a")
+    end
   end
 
   describe "#match" do

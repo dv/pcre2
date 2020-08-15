@@ -4,9 +4,16 @@ module PCRE2
 
     include StringUtils
 
+    # Accepts a String, Regexp or another PCRE2::Regexp
     def initialize(pattern, *options)
-      @source = pattern
-      @pattern_ptr = Lib.compile_pattern(pattern, options)
+      case pattern
+      when ::Regexp, PCRE2::Regexp
+        @source = pattern.source
+      else
+        @source = pattern
+      end
+
+      @pattern_ptr = Lib.compile_pattern(source, options)
     end
 
     # Compiles the Regexp into a JIT optimised version. Returns whether it was successful
