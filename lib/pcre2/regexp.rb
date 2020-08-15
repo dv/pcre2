@@ -36,7 +36,7 @@ module PCRE2
     end
 
     def matches(str, pos = nil, &block)
-      return enum_for(:matches, str, pos).to_a if !block_given?
+      return enum_for(:matches, str, pos) if !block_given?
 
       pos ||= 0
       while pos < str.length
@@ -45,7 +45,13 @@ module PCRE2
         if matchdata
           yield matchdata
 
-          pos = matchdata.offset(0)[1]
+          beginning, ending = matchdata.offset(0)
+
+          if pos == ending # Manually increment position if no change to avoid infinite loops
+            pos += 1
+          else
+            pos = ending
+          end
         else
           return
         end

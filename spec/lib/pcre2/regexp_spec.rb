@@ -64,15 +64,26 @@ RSpec.describe PCRE2::Regexp do
 
   describe "#matches" do
     let(:string) { "well hello hello hello there!"}
-    let(:regexp) { PCRE2::Regexp.new("hello") }
 
     it "yields all matchdatas" do
+      regexp = PCRE2::Regexp.new("hello")
+
       matchdatas = regexp.matches(string).to_a
 
       expect(matchdatas.length).to eq(3)
       expect(matchdatas[0].offset(0)).to eq([5, 10])
       expect(matchdatas[1].offset(0)).to eq([11, 16])
       expect(matchdatas[2].offset(0)).to eq([17, 22])
+    end
+
+    it "does not get stuck in an infinte loop with zero-length matches" do
+      regexp = PCRE2::Regexp.new("")
+      enum = regexp.matches(string)
+
+      first_pair = enum.next.offset(0)
+      second_pair = enum.next.offset(0)
+
+      expect(first_pair).not_to eq(second_pair)
     end
   end
 
